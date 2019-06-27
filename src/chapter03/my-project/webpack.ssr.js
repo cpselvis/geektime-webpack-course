@@ -13,34 +13,36 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const setMPA = () => {
     const entry = {};
     const htmlWebpackPlugins = [];
-    const entryFiles = glob.sync(path.join(__dirname, './src/*/index.js'));
+    const entryFiles = glob.sync(path.join(__dirname, './src/*/index-server.js'));
 
     Object.keys(entryFiles)
         .map((index) => {
             const entryFile = entryFiles[index];
             // '/Users/cpselvis/my-project/src/index/index.js'
 
-            const match = entryFile.match(/src\/(.*)\/index\.js/);
+            const match = entryFile.match(/src\/(.*)\/index-server\.js/);
             const pageName = match && match[1];
 
-            entry[pageName] = entryFile;
-            htmlWebpackPlugins.push(
-                new HtmlWebpackPlugin({
-                    inlineSource: '.css$',
-                    template: path.join(__dirname, `src/${pageName}/index.html`),
-                    filename: `${pageName}.html`,
-                    chunks: ['vendors', pageName],
-                    inject: true,
-                    minify: {
-                        html5: true,
-                        collapseWhitespace: true,
-                        preserveLineBreaks: false,
-                        minifyCSS: true,
-                        minifyJS: true,
-                        removeComments: false
-                    }
-                })
-            );
+            if (pageName) {
+                entry[pageName] = entryFile;
+                htmlWebpackPlugins.push(
+                    new HtmlWebpackPlugin({
+                        inlineSource: '.css$',
+                        template: path.join(__dirname, `src/${pageName}/index.html`),
+                        filename: `${pageName}.html`,
+                        chunks: ['vendors', pageName],
+                        inject: true,
+                        minify: {
+                            html5: true,
+                            collapseWhitespace: true,
+                            preserveLineBreaks: false,
+                            minifyCSS: true,
+                            minifyJS: true,
+                            removeComments: false
+                        }
+                    })
+                );
+            }
         });
 
     return {
@@ -55,9 +57,10 @@ module.exports = {
     entry: entry,
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: '[name]_[chunkhash:8].js'
+        filename: '[name]-server.js',
+        libraryTarget: 'umd'
     },
-    mode: 'production',
+    mode: 'none',
     module: {
         rules: [
             {
@@ -132,20 +135,20 @@ module.exports = {
             cssProcessor: require('cssnano')
         }),
         new CleanWebpackPlugin(),
-        new HtmlWebpackExternalsPlugin({
-            externals: [
-              {
-                module: 'react',
-                entry: 'https://11.url.cn/now/lib/16.2.0/react.min.js',
-                global: 'React',
-              },
-              {
-                module: 'react-dom',
-                entry: 'https://11.url.cn/now/lib/16.2.0/react-dom.min.js',
-                global: 'ReactDOM',
-              },
-            ]
-        }),
+        // new HtmlWebpackExternalsPlugin({
+        //     externals: [
+        //       {
+        //         module: 'react',
+        //         entry: 'https://11.url.cn/now/lib/16.2.0/react.min.js',
+        //         global: 'React',
+        //       },
+        //       {
+        //         module: 'react-dom',
+        //         entry: 'https://11.url.cn/now/lib/16.2.0/react-dom.min.js',
+        //         global: 'ReactDOM',
+        //       },
+        //     ]
+        // }),
         new FriendlyErrorsWebpackPlugin(),
         function() {
             this.hooks.done.tap('done', (stats) => {

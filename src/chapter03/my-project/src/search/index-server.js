@@ -1,10 +1,13 @@
 'use strict';
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import largeNumber from 'large-number';
-import logo from './images/logo.png';
-import './search.less';
+// import React from 'react';
+// import largeNumber from 'large-number';
+// import logo from './images/logo.png';
+// import './search.less';
+const React = require('react');
+const largeNumber = require('large-number');
+const logo = require('./images/logo.png');
+const s = require('./search.less');
 
 class Search extends React.Component {
 
@@ -37,7 +40,4 @@ class Search extends React.Component {
     }
 }
 
-ReactDOM.render(
-    <Search />,
-    document.getElementById('root')
-);
+module.exports = <Search />;
