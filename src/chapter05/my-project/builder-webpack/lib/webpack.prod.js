@@ -32,7 +32,7 @@ const prodConfig = {
       minSize: 0,
       cacheGroups: {
         commons: {
-          name: 'commons',
+          name: 'vendors',
           chunks: 'all',
           minChunks: 2,
         },
