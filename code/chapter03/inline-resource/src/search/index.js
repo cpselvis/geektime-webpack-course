@@ -2,7 +2,6 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import logo from './images/logo.png';
 import './index.less';
 
 class Search extends React.Component {
@@ -13,7 +12,7 @@ class Search extends React.Component {
 
     render() {
         return <div className="search-text">
-            <img src={ logo } /> 搜索文字的内容
+            <img src={ require('./images/logo.png?__inline') } /> 搜索文字的内容
         </div>;
     }
 }
