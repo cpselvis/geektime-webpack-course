@@ -39,29 +39,33 @@ module.exports = class Compiler {
         };
     }
 
-    emitFiles() { 
+    emitFiles() {
         const outputPath = path.join(this.output.path, this.output.filename);
         let modules = '';
         this.modules.map((_module) => {
             modules += `'${ _module.filename }': function (require, module, exports) { ${ _module.transformCode } },`
         });
-        
+
         const bundle = `
             (function(modules) {
                 function require(fileName) {
                     const fn = modules[fileName];
-        
+
                     const module = { exports : {} };
-        
+
                     fn(require, module, module.exports);
-        
+
                     return module.exports;
                 }
 
                 require('${this.entry}');
             })({${modules}})
         `;
-    
+
+        if(!fs.existsSync(this.output.path)) {
+          fs.mkdirSync(this.output.path)
+        };
+
         fs.writeFileSync(outputPath, bundle, 'utf-8');
     }
 };
