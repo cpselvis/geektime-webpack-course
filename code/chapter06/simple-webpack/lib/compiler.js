@@ -15,11 +15,12 @@ module.exports = class Compiler {
     run() {
         const entryModule = this.buildModule(this.entry, true);
         this.modules.push(entryModule);
-        this.modules.map((_module) => {
-            _module.dependencies.map((dependency) => {
+        for(let i = 0; i < this.modules.length; i++) {
+            const _module = this.modules[i];
+            _module.dependencies.forEach((dependency) => {
                 this.modules.push(this.buildModule(dependency));
             });
-        });
+        }
         this.emitFiles();
     }
 
