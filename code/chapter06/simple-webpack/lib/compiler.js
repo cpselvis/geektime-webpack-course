@@ -28,7 +28,7 @@ module.exports = class Compiler {
         if (isEntry) {
             ast = getAST(filename);
         } else {
-            let absolutePath = path.join(process.cwd(), './src', filename);
+            let absolutePath = path.join(process.cwd(), '../src', filename);
             ast = getAST(absolutePath);
         }
 
@@ -42,10 +42,10 @@ module.exports = class Compiler {
     emitFiles() { 
         const outputPath = path.join(this.output.path, this.output.filename);
         let modules = '';
+        let dist_path = '';
         this.modules.map((_module) => {
             modules += `'${ _module.filename }': function (require, module, exports) { ${ _module.transformCode } },`
         });
-        
         const bundle = `
             (function(modules) {
                 function require(fileName) {
@@ -61,7 +61,10 @@ module.exports = class Compiler {
                 require('${this.entry}');
             })({${modules}})
         `;
-    
-        fs.writeFileSync(outputPath, bundle, 'utf-8');
+        dist_path = outputPath.split('/').slice(0, -1).join('/');
+        fs.mkdir(dist_path, (e) => {
+            e && console.log('Directory alreay exist but still write in');
+            fs.writeFileSync(outputPath, bundle, 'utf-8');
+        })
     }
 };
