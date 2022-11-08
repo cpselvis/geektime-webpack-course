@@ -20,7 +20,7 @@
     "css-loader": "^3.2.0",
     "glob": "^7.1.4",
     "html-inline-css-webpack-plugin": "^1.8.0",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^5.5.0",
     "inline-file-loader": "^0.2.0",
     "inline-html-loader": "^0.1.0",
     "less": "^3.10.3",
